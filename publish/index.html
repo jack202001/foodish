@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" data-display="normal">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Foodish — Video Menus for Restaurants</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400..600&family=Sora:wght@400..800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<link rel="stylesheet" href="motion.css" />
+<link rel="stylesheet" href="responsive.css" />
+<style>
+  #root { min-height: 100vh; }
+  @keyframes popUp { from { opacity: 0; transform: scale(1.04); } to { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+<div id="top"></div>
+<div id="root"></div>
+
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="400" fill="#F3E9DC"/>
+    <rect x="120" y="80" width="160" height="240" rx="28" fill="#2A211C"/>
+    <rect x="132" y="104" width="136" height="192" rx="14" fill="#C8643C"/>
+    <path d="M183 168 v64 l54 -32 z" fill="#FBF6EE"/>
+  </svg>
+</template>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="components.jsx"></script>
+<script type="text/babel" src="motion.jsx"></script>
+<script type="text/babel" src="reel.jsx"></script>
+<script type="text/babel" src="menu.jsx"></script>
+<script type="text/babel" src="sections-top.jsx"></script>
+<script type="text/babel" src="sections-bottom.jsx"></script>
+<script type="text/babel" src="app.jsx"></script>
+</body>
+</html>
