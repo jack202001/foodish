@@ -14,6 +14,10 @@
   .hero-flank { display: none !important; }
 }
 
+@media (max-width: 900px) {
+  .grid-2 { grid-template-columns: 1fr !important; }
+}
+
 @media (max-width: 860px) {
   .nav-links { display: none !important; }
   .nav-login { display: none !important; }
@@ -25,6 +29,11 @@
   .grid-2 { grid-template-columns: 1fr !important; }
   .foot-grid { grid-template-columns: 1fr 1fr !important; gap: 28px !important; }
   .hero-split { padding-top: 36px !important; padding-bottom: 56px !important; min-height: 0 !important; }
+  /* centre the hero text column + CTAs on phones (all layouts) */
+  .hero-split > div:first-child { align-items: center !important; text-align: center; }
+  .hero-split > div:first-child .eyebrow { justify-content: center; }
+  .hero-ctas { justify-content: center !important; width: 100%; }
+  .trust-strip { justify-content: center; }
 }
 
 @media (max-width: 460px) {

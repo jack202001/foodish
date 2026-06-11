@@ -95,7 +95,7 @@ function HeroHeading({ copy, size = "clamp(38px, 6vw, 74px)" }) {
 function HeroCTAs({ copy }) {
   const openDemo = useOpenDemo();
   return (
-    <div style={{ display: "flex", gap: 13, flexWrap: "wrap", alignItems: "center" }}>
+    <div className="hero-ctas" style={{ display: "flex", gap: 13, flexWrap: "wrap", alignItems: "center" }}>
       <button onClick={openDemo} className="btn btn-primary">{copy.ctaPrimary} <Icon name="arrow" size={18} color="currentColor" /></button>
       <a href="#menu" className="btn btn-ghost"><Icon name="play" size={15} color="currentColor" /> {copy.ctaSecondary}</a>
     </div>
@@ -105,7 +105,7 @@ function HeroCTAs({ copy }) {
 function TrustStrip() {
   const tr = useI18n();
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 22, flexWrap: "wrap",
+    <div className="trust-strip" style={{ display: "flex", alignItems: "center", gap: 22, flexWrap: "wrap",
       marginTop: 6, color: "var(--ink-mute)", fontSize: 13.5 }}>
       <span style={{ fontFamily: "var(--font-mono)", fontSize: 11.5, letterSpacing: ".1em",
         textTransform: "uppercase" }}>{tr.hero.trust}</span>
