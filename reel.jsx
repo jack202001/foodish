@@ -4,6 +4,7 @@
    ─────────────────────────────────────────────────────────── */
 
 function HeroReel({ brandName = "Foodish" }) {
+  const tr = useI18n();
   const videoRef = useRef(null);
 
   useEffect(() => {
@@ -32,11 +33,21 @@ function HeroReel({ brandName = "Foodish" }) {
           <span style={{ position: "absolute", left: 11, top: 11, fontFamily: "var(--font-mono)",
             fontSize: 10, letterSpacing: ".06em", textTransform: "uppercase", color: "#fff",
             background: "oklch(0 0 0 / .4)", backdropFilter: "blur(4px)", padding: "3px 8px",
-            borderRadius: 6 }}>Pasta</span>
+            borderRadius: 6 }}>{tr.reel.tag}</span>
         </div>
         <div style={{ padding: "13px 15px 15px" }}>
-          <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 20,
-            color: "var(--ink)", letterSpacing: "-.01em" }}>Pasta alla Norma</div>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8 }}>
+            <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 20,
+              color: "var(--ink)", letterSpacing: "-.01em" }}>{tr.reel.name}</div>
+            <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 17,
+              color: "var(--accent-deep)" }}>{tr.reel.price}</div>
+          </div>
+          <div style={{ fontSize: 12.5, color: "var(--ink-mute)", marginTop: 4 }}>{tr.reel.kcal}</div>
+          <div style={{ marginTop: 10, display: "inline-flex", alignItems: "center", gap: 5,
+            fontSize: 10.5, fontWeight: 700, color: "var(--accent-deep)",
+            background: "var(--accent-soft)", padding: "4px 9px", borderRadius: 100 }}>
+            <Icon name="leaf" size={11} color="var(--accent-deep)" /> {tr.reel.tag}
+          </div>
         </div>
       </div>
 
@@ -44,11 +55,12 @@ function HeroReel({ brandName = "Foodish" }) {
       <div style={{ flex: "none", background: "var(--paper)", borderRadius: 22,
         border: "1px solid var(--line)", boxShadow: "var(--shadow-sm)", padding: 12,
         display: "flex", gap: 11, alignItems: "center" }}>
-        <div className="vslot" style={{ width: 60, height: 60, borderRadius: 13, flex: "none" }} />
+        <VideoTile src={tr.reel.nextVideo} ratio="1 / 1" radius={13}
+          style={{ width: 60, height: 60, flex: "none" }} />
         <div style={{ lineHeight: 1.25 }}>
           <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 17,
-            color: "var(--ink)" }}>Whole Sea Bass</div>
-          <div style={{ fontSize: 12, color: "var(--ink-mute)" }}>Salt-baked · lemon · herbs</div>
+            color: "var(--ink)" }}>{tr.reel.nextName}</div>
+          <div style={{ fontSize: 12, color: "var(--ink-mute)" }}>{tr.reel.nextDesc}</div>
         </div>
       </div>
 
@@ -64,7 +76,7 @@ function HeroReel({ brandName = "Foodish" }) {
             <path d="m6 15 6-6 6 6" />
           </svg>
         </span>
-        Scroll for more dishes
+        {tr.phone.scroll}
       </div>
 
       {/* fade the clipped box into the phone bottom */}

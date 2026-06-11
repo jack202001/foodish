@@ -55,6 +55,7 @@ function Icon({ name, size = 22, stroke = 1.7, color = "currentColor" }) {
     cart: <><circle cx="9" cy="20" r="1.4" /><circle cx="18" cy="20" r="1.4" /><path d="M2 3h2l2.4 12.5a1 1 0 0 0 1 .8h9.3a1 1 0 0 0 1-.8L20 7H6" /></>,
     leaf: <><path d="M11 20A7 7 0 0 1 4 13c0-6 7-9 16-9 0 9-3 16-9 16z" /><path d="M11 20c0-4 2-7 6-9" /></>,
     flame: <><path d="M12 3c1 3 4 4 4 8a4 4 0 0 1-8 0c0-2 1-3 1-3 0 1 1 2 2 2 0-3-1-5 1-7z" /></>,
+    user: <><circle cx="12" cy="8" r="4" /><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7" /></>,
   };
   return <svg {...common} aria-hidden="true">{paths[name] || null}</svg>;
 }

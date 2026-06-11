@@ -22,6 +22,7 @@
 @media (max-width: 680px) {
   .wrap { padding-left: 20px; padding-right: 20px; }
   .grid-3 { grid-template-columns: 1fr !important; }
+  .grid-2 { grid-template-columns: 1fr !important; }
   .foot-grid { grid-template-columns: 1fr 1fr !important; gap: 28px !important; }
   .hero-split { padding-top: 36px !important; padding-bottom: 56px !important; min-height: 0 !important; }
 }

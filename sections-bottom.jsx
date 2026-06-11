@@ -4,11 +4,9 @@
 
 /* ── INTERACTIVE SHOWCASE ───────────────────────────────── */
 function Showcase() {
-  const points = [
-    { icon: "play", t: "Tap any dish", d: "Each item plays a short video right where the photo would be." },
-    { icon: "layout", t: "Filter by course", d: "Starters, pasta, mains, desserts — guests jump straight to what they want." },
-    { icon: "cart", t: "Add to the order", d: "Build the order from the table, ready for the waiter or the kitchen." },
-  ];
+  const tr = useI18n();
+  const icons = ["play", "layout", "cart"];
+  const points = tr.showcase.points.map((p, i) => ({ ...p, icon: icons[i] }));
   return (
     <section id="menu" className="section" style={{ position: "relative", overflow: "hidden",
       background: "var(--wine)", color: "var(--cream)" }}>
@@ -17,12 +15,12 @@ function Showcase() {
       <div className="wrap show-grid" style={{ position: "relative", display: "grid",
         gridTemplateColumns: "0.85fr 1fr", gap: 50, alignItems: "center" }}>
         <div style={{ order: 2 }}>
-          <span className="eyebrow" style={{ color: "var(--amber)" }}>Try it yourself</span>
+          <span className="eyebrow" style={{ color: "var(--amber)" }}>{tr.showcase.eyebrow}</span>
           <h2 style={{ marginTop: 18, fontSize: "clamp(32px, 4.6vw, 56px)", color: "var(--cream)" }}>
-            This is a real menu. Go on — tap a dish.
+            {tr.showcase.title}
           </h2>
           <p style={{ marginTop: 18, fontSize: 18.5, color: "oklch(0.86 0.03 70)", maxWidth: 460 }}>
-            It's exactly what your guests see after scanning the QR at the table. No download, no waiting — just hungry eyes doing the selling.
+            {tr.showcase.sub}
           </p>
           <div style={{ marginTop: 30, display: "flex", flexDirection: "column", gap: 16 }}>
             {points.map((p) => (
@@ -41,7 +39,7 @@ function Showcase() {
           <div style={{ marginTop: 30, display: "inline-flex", alignItems: "center", gap: 10,
             fontFamily: "var(--font-mono)", fontSize: 12.5, color: "var(--amber)",
             border: "1px dashed oklch(1 0 0 / 0.25)", borderRadius: 100, padding: "8px 16px" }}>
-            <Icon name="qr" size={15} color="var(--amber)" /> Live preview — fully interactive
+            <Icon name="qr" size={15} color="var(--amber)" /> {tr.showcase.livePreview}
           </div>
         </div>
         <Reveal style={{ order: 1, display: "flex", justifyContent: "center", position: "relative" }}>
@@ -58,27 +56,25 @@ function Showcase() {
 
 /* ── TESTIMONIALS ───────────────────────────────────────── */
 function Testimonials() {
-  const quotes = [
-    { q: "We added videos to our antipasti and they started flying out of the kitchen. Average check is up nearly a quarter.", n: "Marco Bellini", r: "Owner · Osteria Lume, Bologna", icon: "flame" },
-    { q: "Tourists used to point and guess. Now they watch, read it in their language, and order exactly what they want.", n: "Sofia Greco", r: "Manager · Bocca, Rome", icon: "globe" },
-    { q: "Changing the menu used to mean a trip to the printer. Now I update tonight's specials from my phone in the car.", n: "Luca Ferraro", r: "Chef · Fuoco, Milan", icon: "bolt" },
-  ];
+  const tr = useI18n();
+  const icons = ["flame", "globe", "bolt"];
+  const quotes = tr.testimonials.quotes.map((q, i) => ({ ...q, icon: icons[i] }));
   return (
     <section id="stories" className="section" style={{ background: "var(--cream)" }}>
       <div className="wrap">
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 24,
           flexWrap: "wrap" }}>
           <Reveal style={{ maxWidth: 560 }}>
-            <span className="eyebrow">From the pass</span>
+            <span className="eyebrow">{tr.testimonials.eyebrow}</span>
             <h2 style={{ marginTop: 18, fontSize: "clamp(30px, 4.4vw, 50px)" }}>
-              Restaurateurs who let the food do the talking.
+              {tr.testimonials.title}
             </h2>
           </Reveal>
           <Reveal delay={80} style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <div style={{ display: "flex", gap: 2 }}>
               {[0,1,2,3,4].map((i) => <Icon key={i} name="star" size={20} color="var(--amber)" />)}
             </div>
-            <span style={{ fontWeight: 600 }}>4.9/5 · 1,200+ kitchens</span>
+            <span style={{ fontWeight: 600 }}>{tr.testimonials.rating}</span>
           </Reveal>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 18, marginTop: 46 }}
@@ -96,7 +92,7 @@ function Testimonials() {
                 <figcaption style={{ marginTop: 22, display: "flex", alignItems: "center", gap: 12 }}>
                   <span style={{ width: 42, height: 42, borderRadius: "50%", background: "var(--accent-soft)",
                     display: "grid", placeItems: "center", color: "var(--accent-deep)", flex: "none" }}>
-                    <Icon name={t.icon} size={19} color="var(--accent-deep)" />
+                    <Icon name="user" size={20} color="var(--accent-deep)" />
                   </span>
                   <div style={{ lineHeight: 1.25 }}>
                     <div style={{ fontWeight: 700 }}>{t.n}</div>
@@ -137,24 +133,19 @@ function FAQitem({ q, a, open, onClick }) {
 }
 
 function FAQ() {
+  const tr = useI18n();
   const [open, setOpen] = useState(0);
-  const items = [
-    { q: "Do I need a videographer or special equipment?", a: "No. Upload a normal photo of the dish from any phone and we generate a short, appetising looping video for you. If you already have video clips, you can use those too." },
-    { q: "How do guests see the menu?", a: "They point their phone camera at the QR code on the table and the video menu opens instantly in the browser — no app to download, on any modern phone." },
-    { q: "Can I update prices and dishes myself?", a: "Yes, in seconds. Edit a price, hide a sold-out dish, or add tonight's special from your phone or laptop. Changes go live immediately." },
-    { q: "Does it work for tourists who don't speak Italian?", a: "Every item can auto-translate, so each guest reads the menu in their own language while watching the same mouth-watering video." },
-    { q: "What does it cost?", a: "Plans start with a free trial, then a flat monthly fee per location — no commission on orders. Book a demo and we'll find the right plan for your restaurant." },
-  ];
+  const items = tr.faq.items;
   return (
     <section id="faq" className="section" style={{ background: "var(--cream-2)" }}>
       <div className="wrap faq-grid" style={{ display: "grid", gridTemplateColumns: "0.8fr 1.2fr", gap: 44,
         alignItems: "start" }}>
         <Reveal>
-          <span className="eyebrow">Good to know</span>
-          <h2 style={{ marginTop: 18, fontSize: "clamp(30px, 4.2vw, 48px)" }}>Questions, answered.</h2>
+          <span className="eyebrow">{tr.faq.eyebrow}</span>
+          <h2 style={{ marginTop: 18, fontSize: "clamp(30px, 4.2vw, 48px)" }}>{tr.faq.title}</h2>
           <p style={{ marginTop: 16, color: "var(--ink-soft)", fontSize: 17 }}>
-            Still curious? <a href="#cta" style={{ color: "var(--accent-deep)", fontWeight: 600,
-              textDecoration: "underline", textUnderlineOffset: 3 }}>Talk to our team →</a>
+            {tr.faq.stillCurious} <a href="#cta" style={{ color: "var(--accent-deep)", fontWeight: 600,
+              textDecoration: "underline", textUnderlineOffset: 3 }}>{tr.faq.talk}</a>
           </p>
         </Reveal>
         <Reveal delay={80}>
@@ -172,6 +163,8 @@ const FAQitemWrap = FAQitem;
 
 /* ── FINAL CTA ──────────────────────────────────────────── */
 function FinalCTA({ copy }) {
+  const tr = useI18n();
+  const openDemo = useOpenDemo();
   return (
     <section id="cta" className="section" style={{ background: "var(--cream)" }}>
       <div className="wrap">
@@ -184,21 +177,21 @@ function FinalCTA({ copy }) {
             borderRadius: "50%", background: "oklch(1 0 0 / 0.10)" }} />
           <div style={{ position: "relative", maxWidth: 620 }}>
             <span style={{ fontFamily: "var(--font-mono)", fontSize: 12.5, letterSpacing: ".16em",
-              textTransform: "uppercase", opacity: .85 }}>Ready when you are</span>
+              textTransform: "uppercase", opacity: .85 }}>{tr.cta.ready}</span>
             <h2 style={{ marginTop: 18, fontSize: "clamp(34px, 5vw, 62px)", color: "var(--accent-ink)" }}>
               {copy.ctaHeadline}
             </h2>
             <p style={{ marginTop: 18, fontSize: 19, opacity: .92, maxWidth: 500 }}>{copy.ctaSub}</p>
             <div style={{ marginTop: 30, display: "flex", gap: 13, flexWrap: "wrap" }}>
-              <a href="#top" className="btn" style={{ background: "var(--ink)", color: "var(--cream)" }}>
+              <button onClick={openDemo} className="btn" style={{ background: "var(--ink)", color: "var(--cream)" }}>
                 {copy.ctaPrimary} <Icon name="arrow" size={18} color="currentColor" />
-              </a>
+              </button>
               <a href="#menu" className="btn" style={{ background: "oklch(1 0 0 / 0.16)", color: "var(--accent-ink)" }}>
                 {copy.ctaSecondary}
               </a>
             </div>
             <div style={{ marginTop: 22, display: "flex", gap: 20, flexWrap: "wrap", fontSize: 14.5, opacity: .9 }}>
-              {["Free 14-day trial", "No card required", "Live in an afternoon"].map((x) => (
+              {tr.cta.badges.map((x) => (
                 <span key={x} style={{ display: "inline-flex", alignItems: "center", gap: 7 }}>
                   <Icon name="check" size={16} color="currentColor" /> {x}
                 </span>
@@ -212,12 +205,9 @@ function FinalCTA({ copy }) {
 }
 
 /* ── FOOTER ─────────────────────────────────────────────── */
-function Footer({ copy }) {
-  const cols = [
-    { h: "Product", l: ["Features", "Video menus", "QR ordering", "Analytics", "Pricing"] },
-    { h: "Company", l: ["About", "Stories", "Careers", "Contact"] },
-    { h: "Resources", l: ["Help center", "Guides", "Status", "API"] },
-  ];
+function Footer({ copy, lang, onLang }) {
+  const tr = useI18n();
+  const cols = tr.footer.cols;
   return (
     <footer style={{ background: "var(--ink)", color: "oklch(0.82 0.02 70)", paddingTop: 64 }}>
       <div className="wrap">
@@ -250,9 +240,10 @@ function Footer({ copy }) {
         <div style={{ marginTop: 48, paddingTop: 22, paddingBottom: 28,
           borderTop: "1px solid oklch(1 0 0 / 0.1)", display: "flex", justifyContent: "space-between",
           flexWrap: "wrap", gap: 12, fontSize: 13.5, color: "oklch(0.62 0.02 70)" }}>
-          <span>© 2026 {copy.brandName}. Made for restaurants.</span>
-          <div style={{ display: "flex", gap: 22 }}>
-            <a href="#top">Privacy</a><a href="#top">Terms</a><a href="#top">Cookies</a>
+          <span>© 2026 {copy.brandName}. {tr.footer.madeFor}</span>
+          <div style={{ display: "flex", gap: 22, alignItems: "center" }}>
+            {tr.footer.legal.map((x) => <a key={x} href="#top">{x}</a>)}
+            <LangToggle lang={lang} onChange={onLang} dark />
           </div>
         </div>
       </div>

@@ -66,6 +66,23 @@ function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
   const brand = BRANDS[t.brand] || BRANDS.sizzle;
 
+  const [lang, setLangState] = useState(detectLang());
+  const tr = I18N[lang] || I18N.en;
+  const setLang = (l) => {
+    setLangState(l);
+    try {
+      localStorage.setItem("foodish_lang", l);
+      document.documentElement.lang = l;
+      const u = new URL(window.location.href);
+      if (l === "en") u.searchParams.delete("lang"); else u.searchParams.set("lang", l);
+      window.history.replaceState({}, "", u);
+    } catch (e) {}
+  };
+  useEffect(() => { document.documentElement.lang = lang; }, [lang]);
+
+  const [demoOpen, setDemoOpen] = useState(false);
+  const openDemo = React.useCallback(() => setDemoOpen(true), []);
+
   /* apply surfaces (brand) + accent + font to :root */
   useEffect(() => {
     const root = document.documentElement;
@@ -92,18 +109,25 @@ function App() {
     setTweak("ctaSecondary", b.ctaSecondary);
   };
 
+  const it = lang === "it";
   const copy = {
     brandName: brand.name, glyph: brand.glyph, logoRound: brand.logoRound,
-    tagline: brand.tagline, eyebrow: brand.eyebrow,
-    headline: t.headline, headlineAccent: t.headlineAccent, sub: t.sub,
-    ctaPrimary: t.ctaPrimary, ctaSecondary: t.ctaSecondary,
-    ctaHeadline: t.brand === "carta" ? "Turn your menu into a quiet maître d'." : "Turn your menu into your best waiter.",
-    ctaSub: "Book a 20-minute demo and watch one of your own dishes come to life — before you decide.",
+    tagline: it ? tr.footer.tagline : brand.tagline,
+    eyebrow: it ? tr.hero.eyebrow : brand.eyebrow,
+    headline: it ? tr.hero.headline : t.headline,
+    headlineAccent: it ? tr.hero.headlineAccent : t.headlineAccent,
+    sub: it ? tr.hero.sub : t.sub,
+    ctaPrimary: it ? tr.hero.ctaPrimary : t.ctaPrimary,
+    ctaSecondary: it ? tr.hero.ctaSecondary : t.ctaSecondary,
+    ctaHeadline: it ? tr.cta.headline
+      : (t.brand === "carta" ? "Turn your menu into a quiet maître d'." : "Turn your menu into your best waiter."),
+    ctaSub: it ? tr.cta.sub : "Book a 20-minute demo and watch one of your own dishes come to life — before you decide.",
   };
 
   return (
-    <React.Fragment>
-      <Nav copy={copy} />
+    <LangContext.Provider value={lang}>
+      <DemoContext.Provider value={openDemo}>
+      <Nav copy={copy} lang={lang} onLang={setLang} />
       <main>
         <Hero layout={t.heroLayout} copy={copy} />
         <HowItWorks />
@@ -113,9 +137,14 @@ function App() {
         <FAQ />
         <FinalCTA copy={copy} />
       </main>
-      <Footer copy={copy} />
+      <Footer copy={copy} lang={lang} onLang={setLang} />
 
       <TweaksPanel>
+        <TweakSection label="Language" />
+        <TweakRadio label="Language" value={lang}
+          options={[{ value: "en", label: "English" }, { value: "it", label: "Italiano" }]}
+          onChange={setLang} />
+
         <TweakSection label="Brand identity" />
         <TweakRadio label="Brand" value={t.brand}
           options={[{ value: "sizzle", label: "Foodish" }, { value: "carta", label: "Carta" }]}
@@ -146,7 +175,9 @@ function App() {
         <TweakText label="Secondary button" value={t.ctaSecondary}
           onChange={(v) => setTweak("ctaSecondary", v)} />
       </TweaksPanel>
-    </React.Fragment>
+      <DemoModal open={demoOpen} onClose={() => setDemoOpen(false)} />
+      </DemoContext.Provider>
+    </LangContext.Provider>
   );
 }
 

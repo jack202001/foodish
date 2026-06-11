@@ -16,14 +16,16 @@ function Logo({ glyph = "play", size = 30, round = false }) {
   );
 }
 
-function Nav({ copy }) {
+function Nav({ copy, lang, onLang }) {
+  const tr = useI18n();
+  const openDemo = useOpenDemo();
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
     const on = () => setScrolled(window.scrollY > 24);
     on(); window.addEventListener("scroll", on, { passive: true });
     return () => window.removeEventListener("scroll", on);
   }, []);
-  const links = ["How it works", "Features", "Menu", "Stories", "FAQ"];
+  const links = tr.nav.links;
   return (
     <header style={{ position: "sticky", top: 0, zIndex: 100,
       background: scrolled ? "var(--nav-bg)" : "transparent",
@@ -39,17 +41,17 @@ function Nav({ copy }) {
         </a>
         <nav style={{ display: "flex", gap: 30 }} className="nav-links">
           {links.map((l) => (
-            <a key={l} href={`#${l.split(" ")[0].toLowerCase()}`}
+            <a key={l.href} href={l.href}
               style={{ fontSize: 15, fontWeight: 500, color: "var(--ink-soft)", transition: "color .2s" }}
               onMouseEnter={(e) => e.currentTarget.style.color = "var(--ink)"}
-              onMouseLeave={(e) => e.currentTarget.style.color = "var(--ink-soft)"}>{l}</a>
+              onMouseLeave={(e) => e.currentTarget.style.color = "var(--ink-soft)"}>{l.label}</a>
           ))}
         </nav>
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-          <a href="#cta" style={{ fontSize: 15, fontWeight: 600, color: "var(--ink)" }} className="nav-login">Sign in</a>
-          <a href="#cta" className="btn btn-primary" style={{ padding: "10px 18px", fontSize: 15 }}>
+          <LangToggle lang={lang} onChange={onLang} />
+          <button onClick={openDemo} className="btn btn-primary" style={{ padding: "10px 18px", fontSize: 15 }}>
             {copy.ctaPrimary}
-          </a>
+          </button>
         </div>
       </div>
     </header>
@@ -91,20 +93,22 @@ function HeroHeading({ copy, size = "clamp(38px, 6vw, 74px)" }) {
 }
 
 function HeroCTAs({ copy }) {
+  const openDemo = useOpenDemo();
   return (
     <div style={{ display: "flex", gap: 13, flexWrap: "wrap", alignItems: "center" }}>
-      <a href="#cta" className="btn btn-primary">{copy.ctaPrimary} <Icon name="arrow" size={18} color="currentColor" /></a>
+      <button onClick={openDemo} className="btn btn-primary">{copy.ctaPrimary} <Icon name="arrow" size={18} color="currentColor" /></button>
       <a href="#menu" className="btn btn-ghost"><Icon name="play" size={15} color="currentColor" /> {copy.ctaSecondary}</a>
     </div>
   );
 }
 
 function TrustStrip() {
+  const tr = useI18n();
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 22, flexWrap: "wrap",
       marginTop: 6, color: "var(--ink-mute)", fontSize: 13.5 }}>
       <span style={{ fontFamily: "var(--font-mono)", fontSize: 11.5, letterSpacing: ".1em",
-        textTransform: "uppercase" }}>Loved by 1,200+ kitchens</span>
+        textTransform: "uppercase" }}>{tr.hero.trust}</span>
       <div style={{ display: "flex", gap: 14, alignItems: "center" }}>
         {["Osteria Lume", "Bocca", "Fuoco", "Verde"].map((n) => (
           <span key={n} style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 15,
@@ -116,6 +120,7 @@ function TrustStrip() {
 }
 
 function Hero({ layout, copy }) {
+  const tr = useI18n();
   /* ── A · SPLIT ──────────────────────────────────────────── */
   if (layout === "split") {
     return (
@@ -139,9 +144,9 @@ function Hero({ layout, copy }) {
             <div style={{ position: "relative", zIndex: 1 }}>
               <Phone width={310}><HeroReel brandName={copy.brandName} /></Phone>
             </div>
-            <StatPill icon="chart" big="+23%" small="avg. order value"
+            <StatPill icon="chart" big="+23%" small={tr.stats.aov}
               style={{ position: "absolute", top: "12%", left: "-16%", zIndex: 2 }} />
-            <StatPill icon="clock" big="4 min" small="to build a menu"
+            <StatPill icon="clock" big="4 min" small={tr.stats.buildMenu}
               style={{ position: "absolute", bottom: "14%", right: "-14%", zIndex: 2 }} />
           </Reveal>
         </div>
@@ -187,9 +192,9 @@ function Hero({ layout, copy }) {
           </div>
           <div style={{ display: "flex", justifyContent: "center", gap: 16, marginTop: 36, flexWrap: "wrap",
             position: "relative", zIndex: 3 }}>
-            <StatPill icon="chart" big="+23%" small="avg. order value" />
-            <StatPill icon="globe" big="0" small="app downloads — just a QR" />
-            <StatPill icon="bolt" big="4 min" small="to publish" />
+            <StatPill icon="chart" big="+23%" small={tr.stats.aov} />
+            <StatPill icon="globe" big="0" small={tr.stats.appDownloads} />
+            <StatPill icon="bolt" big="4 min" small={tr.stats.publish} />
           </div>
         </div>
       </section>
@@ -217,11 +222,11 @@ function Hero({ layout, copy }) {
           <Reveal delay={240}>
             <div style={{ marginTop: 34, display: "flex", flexDirection: "column", gap: 12,
               fontFamily: "var(--font-mono)", fontSize: 13, color: "var(--ink-soft)" }}>
-              {[["01", "Upload a photo of the dish"], ["02", "We turn it into a 6-second video"], ["03", "Guests scan, watch, order"]].map(([n, t]) => (
+              {tr.heroSteps.map(([n, txt]) => (
                 <div key={n} style={{ display: "flex", gap: 14, alignItems: "center" }}>
                   <span style={{ color: "var(--accent-deep)", fontWeight: 700 }}>{n}</span>
                   <span style={{ width: 26, height: 1, background: "var(--line-2)" }} />
-                  <span>{t}</span>
+                  <span>{txt}</span>
                 </div>
               ))}
             </div>
@@ -234,7 +239,7 @@ function Hero({ layout, copy }) {
             paddingTop: 24 }}>
             <Phone width={300}><HeroReel brandName={copy.brandName} /></Phone>
           </div>
-          <StatPill icon="chart" big="+23%" small="avg. order value"
+            <StatPill icon="chart" big="+23%" small={tr.stats.aov}
             style={{ position: "absolute", left: "-10%", bottom: "18%", zIndex: 2 }} />
         </Reveal>
       </div>
@@ -244,18 +249,20 @@ function Hero({ layout, copy }) {
 
 /* ── HOW IT WORKS ───────────────────────────────────────── */
 function HowItWorks() {
-  const steps = [
-    { n: "01", icon: "upload", t: "Send us your pics", d: "Email or upload photos of your dishes — whatever you already have. No shoot, no studio, no special gear on your side.", kind: "upload", clip: "your photo, in", photo: "how-photo.jpg", photoPos: "center 42%" },
-    { n: "02", icon: "sparkle", t: "We create the menu", d: "Our team turns your photos into short, mouth-watering video dishes and builds your whole menu for you — done for you, end to end.", kind: "transform", clip: "we make it move", video: "how-video.mp4" },
-    { n: "03", icon: "qr", t: "Share your menu", d: "Get it as a QR code for the tables or a link for your website. Share it anywhere — and send us changes anytime.", kind: "qr", clip: "qr + website" },
+  const tr = useI18n();
+  const meta = [
+    { n: "01", icon: "upload", kind: "upload", photo: "how-photo.jpg", photoPos: "center 42%" },
+    { n: "02", icon: "sparkle", kind: "transform", video: "how-video.mp4" },
+    { n: "03", icon: "qr", kind: "qr" },
   ];
+  const steps = meta.map((m, i) => ({ ...m, ...tr.how.steps[i] }));
   return (
     <section id="how" className="section" style={{ background: "var(--cream)" }}>
       <div className="wrap">
         <Reveal style={{ maxWidth: 660 }}>
-          <span className="eyebrow">A done-for-you service</span>
+          <span className="eyebrow">{tr.how.eyebrow}</span>
           <h2 style={{ marginTop: 18, fontSize: "clamp(30px, 4.4vw, 50px)" }}>
-            You send the photos. We build the menu. You share it.
+            {tr.how.title}
           </h2>
         </Reveal>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 22, marginTop: 50 }}
@@ -275,7 +282,7 @@ function HowItWorks() {
                 </div>
                 <h3 style={{ marginTop: 22, fontSize: 23 }}>{s.t}</h3>
                 <p style={{ marginTop: 10, color: "var(--ink-soft)", fontSize: 16 }}>
-                  {s.d.replace("Sizzle turns", "We turn")}
+                  {s.d}
                 </p>
                 <div style={{ marginTop: 20, flex: 1, display: "flex", alignItems: "flex-end" }}>
                   {s.video ? (
@@ -289,7 +296,7 @@ function HowItWorks() {
                       <span style={{ position: "absolute", left: 10, top: 10, fontFamily: "var(--font-mono)",
                         fontSize: 10, letterSpacing: ".06em", textTransform: "uppercase", color: "#fff",
                         background: "oklch(0 0 0 / .4)", backdropFilter: "blur(4px)", padding: "3px 8px",
-                        borderRadius: 6 }}>Your photo</span>
+                        borderRadius: 6 }}>{tr.how.yourPhoto}</span>
                     </div>
                   ) : (
                     <MotionClip kind={s.kind} caption={s.clip} style={{ width: "100%" }} />
@@ -306,27 +313,22 @@ function HowItWorks() {
 
 /* ── FEATURES ───────────────────────────────────────────── */
 function Features() {
-  const feats = [
-    { icon: "chart", t: "Sell the dish, not the text", d: "Diners spend 30% longer on a video item. Hungry eyes mean bigger orders and fewer “what's that?” questions." },
-    { icon: "bolt", t: "Change anything instantly", d: "86'd the branzino? Toggle it off. New price? Type it. The menu updates live — no reprinting, ever." },
-    { icon: "globe", t: "Works in any language", d: "Auto-translate every item for tourists. One menu, read in the guest's own language at the tap of a flag." },
-    { icon: "leaf", t: "Allergens & diet filters", d: "Tag vegan, gluten-free, spicy. Guests filter the menu to exactly what they can eat — fewer mistakes for staff." },
-    { icon: "qr", t: "No app, just a scan", d: "Guests point their camera at the QR and the menu opens. Nothing to download, works on every phone." },
-    { icon: "star", t: "See what sells", d: "Know which videos get watched, which dishes get added, and what your tables are really craving." },
-  ];
+  const tr = useI18n();
+  const icons = ["chart", "globe", "leaf", "qr"];
+  const feats = tr.features.items.map((f, i) => ({ ...f, icon: icons[i] }));
   return (
     <section id="features" className="section" style={{ background: "var(--cream-2)" }}>
       <div className="wrap">
         <Reveal style={{ maxWidth: 660 }}>
-          <span className="eyebrow">Why restaurants switch</span>
+          <span className="eyebrow">{tr.features.eyebrow}</span>
           <h2 style={{ marginTop: 18, fontSize: "clamp(30px, 4.4vw, 50px)" }}>
-            Everything a paper menu can't do.
+            {tr.features.title}
           </h2>
         </Reveal>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 18, marginTop: 50 }}
-          className="grid-3">
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 18, marginTop: 50 }}
+          className="grid-2">
           {feats.map((f, i) => (
-            <Reveal key={f.t} delay={(i % 3) * 80}>
+            <Reveal key={f.t} delay={(i % 2) * 80}>
               <div className="feat-card" style={{ background: "var(--paper)", border: "1px solid var(--line)",
                 borderRadius: "var(--r-md)", padding: 26, height: "100%", transition: "transform .2s, box-shadow .2s" }}>
                 <span style={{ width: 46, height: 46, borderRadius: 13, background: "var(--accent-soft)",

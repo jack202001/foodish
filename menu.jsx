@@ -11,6 +11,9 @@ const DISHES = [
 const CATS = ["Starters", "Mains", "Desserts"];
 
 function VideoMenu({ interactive = false, restaurant = "Osteria Lume", accentName = "" }) {
+  const tr = useI18n();
+  const T = tr.phone;
+  const dn = (d) => (tr.dishes[d.id] || {});
   const [active, setActive] = useState(null);   // dish id playing fullscreen
   const [cat, setCat] = useState("Starters");
   const [prog, setProg] = useState(0);
@@ -58,7 +61,7 @@ function VideoMenu({ interactive = false, restaurant = "Osteria Lume", accentNam
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div>
             <div style={{ fontFamily: "var(--font-mono)", fontSize: 9.5, letterSpacing: ".14em",
-              textTransform: "uppercase", color: "var(--accent-deep)" }}>Dinner menu</div>
+              textTransform: "uppercase", color: "var(--accent-deep)" }}>{T.dinnerMenu}</div>
             <div style={{ fontFamily: "var(--font-display)", fontSize: 20, fontWeight: 700,
               color: "var(--ink)", letterSpacing: "-.02em", lineHeight: 1.1 }}>{restaurant}</div>
           </div>
@@ -85,7 +88,7 @@ function VideoMenu({ interactive = false, restaurant = "Osteria Lume", accentNam
                 cursor: interactive ? "pointer" : "default",
                 background: c === cat ? "var(--ink)" : "var(--cream-2)",
                 color: c === cat ? "var(--cream)" : "var(--ink-soft)",
-                transition: "background .2s, color .2s" }}>{c}</button>
+                transition: "background .2s, color .2s" }}>{T.cats[c] || c}</button>
           ))}
         </div>
       </div>
@@ -98,22 +101,22 @@ function VideoMenu({ interactive = false, restaurant = "Osteria Lume", accentNam
             boxShadow: "var(--shadow-sm)", border: "1px solid var(--line)", flexShrink: 0 }}>
             <div onClick={() => interactive && setActive(d.id)}
               style={{ cursor: interactive ? "pointer" : "default" }}>
-              <VideoTile src={d.video} ratio="16 / 10" radius={0} tag={d.cat}
+              <VideoTile src={d.video} ratio="16 / 10" radius={0} tag={T.cats[d.cat] || d.cat}
                 style={{ borderTopLeftRadius: 17, borderTopRightRadius: 17 }} />
             </div>
             <div style={{ padding: "11px 13px 13px" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8 }}>
                 <div style={{ fontFamily: "var(--font-display)", fontSize: 16, fontWeight: 700,
-                  color: "var(--ink)", letterSpacing: "-.01em" }}>{d.name}</div>
+                  color: "var(--ink)", letterSpacing: "-.01em" }}>{dn(d).name}</div>
                 <div style={{ fontFamily: "var(--font-display)", fontSize: 15, fontWeight: 700,
                   color: "var(--accent-deep)" }}>{d.price}</div>
               </div>
-              <div style={{ fontSize: 11.5, color: "var(--ink-mute)", marginTop: 3 }}>{d.kcal}</div>
+              <div style={{ fontSize: 11.5, color: "var(--ink-mute)", marginTop: 3 }}>{dn(d).kcal}</div>
               <div style={{ marginTop: 10, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
                 <div style={{ display: "inline-flex", alignItems: "center", gap: 5,
                   fontSize: 10.5, fontWeight: 700, color: "var(--accent-deep)",
                   background: "var(--accent-soft)", padding: "4px 9px", borderRadius: 100 }}>
-                  <Icon name={d.icon} size={11} color="var(--accent-deep)" /> {d.tag}
+                  <Icon name={d.icon} size={11} color="var(--accent-deep)" /> {dn(d).tag}
                 </div>
                 {interactive && (
                   <button onClick={() => addToCart(d.id)}
@@ -122,8 +125,8 @@ function VideoMenu({ interactive = false, restaurant = "Osteria Lume", accentNam
                       background: justAdded === d.id ? "oklch(0.6 0.13 145)" : "var(--ink)",
                       color: "var(--cream)", transition: "background .2s" }}>
                     {justAdded === d.id
-                      ? <><Icon name="check" size={13} color="var(--cream)" /> Added</>
-                      : <><Icon name="plus" size={13} color="var(--cream)" /> Add</>}
+                      ? <><Icon name="check" size={13} color="var(--cream)" /> {T.added}</>
+                      : <><Icon name="plus" size={13} color="var(--cream)" /> {T.add}</>}
                   </button>
                 )}
               </div>
@@ -143,8 +146,8 @@ function VideoMenu({ interactive = false, restaurant = "Osteria Lume", accentNam
               background: count > 0 ? "var(--accent)" : "var(--cream-2)",
               color: count > 0 ? "var(--accent-ink)" : "var(--ink-mute)", transition: "background .2s" }}>
             {count > 0
-              ? <><Icon name="cart" size={15} color="var(--accent-ink)" /> View order · {count} {count === 1 ? "item" : "items"} · €{total}</>
-              : <>Tap + to add a dish</>}
+              ? <><Icon name="cart" size={15} color="var(--accent-ink)" /> {T.viewOrder} · {count} {count === 1 ? T.item : T.items} · €{total}</>
+              : <>{T.tapToAdd}</>}
           </button>
         </div>
       )}
@@ -161,7 +164,7 @@ function VideoMenu({ interactive = false, restaurant = "Osteria Lume", accentNam
               boxShadow: "0 -10px 40px oklch(0.2 0.04 45 / .3)" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
               <div style={{ fontFamily: "var(--font-display)", fontSize: 19, fontWeight: 700, color: "var(--ink)" }}>
-                Your order
+                {T.yourOrder}
               </div>
               <button onClick={() => setShowCart(false)}
                 style={{ all: "unset", cursor: "pointer", width: 28, height: 28, borderRadius: "50%",
@@ -178,8 +181,8 @@ function VideoMenu({ interactive = false, restaurant = "Osteria Lume", accentNam
                       style={{ width: 48, height: 48, flex: "none" }} />
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 14,
-                        color: "var(--ink)" }}>{d.name}</div>
-                      <div style={{ fontSize: 11.5, color: "var(--ink-mute)" }}>€{eur(d.price)} each</div>
+                        color: "var(--ink)" }}>{dn(d).name}</div>
+                      <div style={{ fontSize: 11.5, color: "var(--ink-mute)" }}>€{eur(d.price)} {T.each}</div>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
                       <button onClick={() => removeFromCart(id)}
@@ -199,12 +202,12 @@ function VideoMenu({ interactive = false, restaurant = "Osteria Lume", accentNam
             <div style={{ marginTop: 14, paddingTop: 14, borderTop: "1px solid var(--line)" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline",
                 marginBottom: 11 }}>
-                <span style={{ color: "var(--ink-soft)", fontSize: 14 }}>Total</span>
+                <span style={{ color: "var(--ink-soft)", fontSize: 14 }}>{T.total}</span>
                 <span style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: 22,
                   color: "var(--ink)" }}>€{total}</span>
               </div>
               <div className="btn btn-primary" style={{ width: "100%", fontSize: 14, padding: "12px" }}>
-                Send order to kitchen
+                {T.sendOrder}
               </div>
             </div>
           </div>
@@ -220,7 +223,7 @@ function VideoMenu({ interactive = false, restaurant = "Osteria Lume", accentNam
             style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }} />
           <span style={{ position: "absolute", top: 50, left: 16, zIndex: 3, fontFamily: "var(--font-mono)",
             fontSize: 10, letterSpacing: ".06em", textTransform: "uppercase", color: "#fff",
-            background: "oklch(0 0 0 / .4)", backdropFilter: "blur(4px)", padding: "3px 8px", borderRadius: 6 }}>Now playing</span>
+            background: "oklch(0 0 0 / .4)", backdropFilter: "blur(4px)", padding: "3px 8px", borderRadius: 6 }}>{T.nowPlaying}</span>
           {/* progress */}
           <div style={{ position: "absolute", top: 50, left: 16, right: 16, height: 3, borderRadius: 3,
             background: "oklch(1 0 0 / .25)", zIndex: 3 }}>
@@ -237,8 +240,8 @@ function VideoMenu({ interactive = false, restaurant = "Osteria Lume", accentNam
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 10 }}>
               <div>
                 <div style={{ fontFamily: "var(--font-display)", fontSize: 22, fontWeight: 700,
-                  color: "#fff", letterSpacing: "-.02em" }}>{playing.name}</div>
-                <div style={{ fontSize: 12.5, color: "oklch(0.85 0.02 70)", marginTop: 3 }}>{playing.kcal}</div>
+                  color: "#fff", letterSpacing: "-.02em" }}>{dn(playing).name}</div>
+                <div style={{ fontSize: 12.5, color: "oklch(0.85 0.02 70)", marginTop: 3 }}>{dn(playing).kcal}</div>
               </div>
               <div style={{ fontFamily: "var(--font-display)", fontSize: 20, fontWeight: 700,
                 color: "var(--amber)" }}>{playing.price}</div>
@@ -251,8 +254,8 @@ function VideoMenu({ interactive = false, restaurant = "Osteria Lume", accentNam
                   background: justAdded === playing.id ? "oklch(0.6 0.13 145)" : "var(--accent)",
                   color: justAdded === playing.id ? "#fff" : "var(--accent-ink)", transition: "background .2s" }}>
                 {justAdded === playing.id
-                  ? <><Icon name="check" size={15} color="#fff" /> Added to order</>
-                  : <>Add · {playing.price}</>}
+                  ? <><Icon name="check" size={15} color="#fff" /> {T.addedToOrder}</>
+                  : <>{T.add} · {playing.price}</>}
               </button>
               <button onClick={(e) => { e.stopPropagation(); setActive(null); }}
                 style={{ all: "unset", cursor: "pointer", width: 46, borderRadius: 100, display: "grid",

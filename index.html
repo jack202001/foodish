@@ -13,6 +13,8 @@
 <style>
   #root { min-height: 100vh; }
   @keyframes popUp { from { opacity: 0; transform: scale(1.04); } to { opacity: 1; transform: none; } }
+  @keyframes demoFade { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes demoPop { from { opacity: 0; transform: translateY(12px) scale(.98); } to { opacity: 1; transform: none; } }
 </style>
 </head>
 <body>
@@ -33,6 +35,8 @@
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 
 <script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="i18n.jsx"></script>
+<script type="text/babel" src="demo-modal.jsx"></script>
 <script type="text/babel" src="components.jsx"></script>
 <script type="text/babel" src="motion.jsx"></script>
 <script type="text/babel" src="reel.jsx"></script>
