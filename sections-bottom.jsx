@@ -2,6 +2,112 @@
    SIZZLE — sections (bottom): Showcase, Testimonials, FAQ, CTA, Footer
    ─────────────────────────────────────────────────────────── */
 
+/* ── VIDEO GALLERY STRIP ────────────────────────────────── */
+function VideoGallery() {
+  const tr = useI18n();
+  const videos = ["dish-b.mp4", "dish-c.mp4", "dish-d.mp4", "dish-e.mp4", "dish-reel.mp4"];
+  const items = [...videos, ...videos]; // clone per loop seamless
+  const trackRef = React.useRef(null);
+  const rafRef = React.useRef(null);
+  const paused = React.useRef(false);
+  const resumeTimer = React.useRef(null);
+  const programmatic = React.useRef(false);
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    const speed = 0.6;
+
+    function tick() {
+      const half = track.scrollWidth / 2;
+
+      if (!paused.current) track.scrollLeft += speed;
+
+      // teleport seamless — ignoriamo l'evento scroll che ne deriva
+      if (track.scrollLeft >= half) {
+        programmatic.current = true;
+        track.scrollLeft -= half;
+      } else if (track.scrollLeft <= 0 && paused.current) {
+        programmatic.current = true;
+        track.scrollLeft += half;
+      }
+
+      rafRef.current = requestAnimationFrame(tick);
+    }
+
+    // inizia a metà così si può scorrere anche all'indietro
+    track.scrollLeft = track.scrollWidth / 4;
+    rafRef.current = requestAnimationFrame(tick);
+
+    const onScroll = () => {
+      if (programmatic.current) { programmatic.current = false; return; }
+      paused.current = true;
+      clearTimeout(resumeTimer.current);
+      resumeTimer.current = setTimeout(() => { paused.current = false; }, 1500);
+    };
+
+    track.addEventListener("mouseenter", () => { paused.current = true; });
+    track.addEventListener("mouseleave", () => { paused.current = false; });
+    track.addEventListener("touchstart", () => { paused.current = true; }, { passive: true });
+    track.addEventListener("touchend", () => {
+      clearTimeout(resumeTimer.current);
+      resumeTimer.current = setTimeout(() => { paused.current = false; }, 1500);
+    });
+    track.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => cancelAnimationFrame(rafRef.current);
+  }, []);
+
+  return (
+    <section style={{ background: "var(--cream-2)", padding: "72px 0" }}>
+      <div className="wrap" style={{ marginBottom: 40 }}>
+        <Reveal>
+          <span className="eyebrow">{tr.gallery.eyebrow}</span>
+          <h2 style={{ marginTop: 18, fontSize: "clamp(30px, 4.4vw, 50px)" }}>
+            {tr.gallery.title}
+          </h2>
+        </Reveal>
+      </div>
+      <div
+        ref={trackRef}
+        style={{
+          display: "flex",
+          gap: 16,
+          overflowX: "scroll",
+          scrollbarWidth: "none",
+          msOverflowStyle: "none",
+          paddingInline: 28,
+          WebkitMaskImage: "linear-gradient(to right, transparent, black 8%, black 92%, transparent)",
+          maskImage: "linear-gradient(to right, transparent, black 8%, black 92%, transparent)",
+          cursor: "grab",
+        }}
+      >
+        {items.map((src, i) => (
+          <div key={i} style={{
+            flex: "none",
+            width: 200,
+            aspectRatio: "9 / 16",
+            borderRadius: 20,
+            overflow: "hidden",
+            boxShadow: "var(--shadow-lg)",
+            background: "var(--ink)",
+          }}>
+            <video
+              src={src}
+              autoPlay
+              muted
+              loop
+              playsInline
+              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+            />
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 /* ── INTERACTIVE SHOWCASE ───────────────────────────────── */
 function Showcase() {
   const tr = useI18n();
@@ -251,4 +357,4 @@ function Footer({ copy, lang, onLang }) {
   );
 }
 
-Object.assign(window, { Showcase, Testimonials, FAQ, FinalCTA, Footer });
+Object.assign(window, { VideoGallery, Showcase, Testimonials, FAQ, FinalCTA, Footer });

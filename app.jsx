@@ -132,6 +132,7 @@ function App() {
         <Hero layout={t.heroLayout} copy={copy} />
         <HowItWorks />
         <Features />
+        <VideoGallery />
         <Showcase />
         <Testimonials />
         <FAQ />

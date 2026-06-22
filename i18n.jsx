@@ -76,6 +76,10 @@ const I18N = {
         { q: "Changing the menu used to mean a trip to the printer. Now I update tonight's specials from my phone in the car.", n: "Luca Ferraro", r: "Chef · Fuoco, Milan" },
       ],
     },
+    gallery: {
+      eyebrow: "In action",
+      title: "Dishes that speak for themselves",
+    },
     faq: {
       eyebrow: "Good to know",
       title: "Questions, answered.",
@@ -210,6 +214,10 @@ const I18N = {
         { q: "Prima i clienti indicavano e tiravano a indovinare. Ora guardano, leggono nella loro lingua e ordinano esattamente ciò che vogliono.", n: "Olivia Bennett", r: "Manager · Saffron, San Francisco" },
         { q: "Cambiare il menu voleva dire una corsa in tipografia. Ora aggiorno i piatti del giorno dal telefono, in macchina.", n: "Daniel Cooper", r: "Chef · Ember, Chicago" },
       ],
+    },
+    gallery: {
+      eyebrow: "Dal vivo",
+      title: "Piatti che parlano da soli",
     },
     faq: {
       eyebrow: "Buono a sapersi",

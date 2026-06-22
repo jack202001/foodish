@@ -1,3 +1,19 @@
+/* ── VIDEO GALLERY STRIP ────────────────────────────────── */
+@keyframes galleryScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.gallery-track {
+  display: flex;
+  gap: 16px;
+  width: max-content;
+  animation: galleryScroll 28s linear infinite;
+}
+.gallery-track:hover { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  .gallery-track { animation: none; }
+}
+
 /* ───────────────────────────────────────────────────────────
    SIZZLE — motion-design clip keyframes
    Base styles render a complete, pleasant still; animation only
